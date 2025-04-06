@@ -1,43 +1,44 @@
-// This file is a fallback for using MaterialIcons on Android and web.
-
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SymbolWeight } from 'expo-symbols';
 import React from 'react';
-import { OpaqueColorValue, StyleProp, ViewStyle } from 'react-native';
+import { Image, ImageStyle, ImageSourcePropType } from 'react-native';
 
-// Add your SFSymbol to MaterialIcons mappings here.
-const MAPPING = {
-  // See MaterialIcons here: https://icons.expo.fyi
-  // See SF Symbols in the SF Symbols app on Mac.
-  'house.fill': 'home',
-  'paperplane.fill': 'send',
-  'chevron.left.forwardslash.chevron.right': 'code',
-  'chevron.right': 'chevron-right',
-} as Partial<
-  Record<
-    import('expo-symbols').SymbolViewProps['name'],
-    React.ComponentProps<typeof MaterialIcons>['name']
-  >
->;
-
-export type IconSymbolName = keyof typeof MAPPING;
-
-/**
- * An icon component that uses native SFSymbols on iOS, and MaterialIcons on Android and web. This ensures a consistent look across platforms, and optimal resource usage.
- *
- * Icon `name`s are based on SFSymbols and require manual mapping to MaterialIcons.
- */
-export function IconSymbol({
-  name,
-  size = 24,
-  color,
-  style,
-}: {
-  name: IconSymbolName;
-  size?: number;
-  color: string | OpaqueColorValue;
-  style?: StyleProp<ViewStyle>;
-  weight?: SymbolWeight;
-}) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+interface IconSymbolProps {
+  size: number;
+  color: string;
+  name: string;
 }
+
+export const IconSymbol: React.FC<IconSymbolProps> = ({ size, color, name }) => {
+  let source: ImageSourcePropType;
+
+  // Selecciona la imagen según el nombre que se pase
+  switch (name) {
+    case 'house.fill':
+      source = require('@/assets/images/home.png');
+      break;
+    case 'paperplane.fill':
+      source = require('@/assets/images/reminder.png');
+      break;
+    // Puedes agregar más casos para otros iconos
+    case 'tips':
+      source = require('@/assets/images/tips.png');
+      break;
+    // Puedes agregar más casos para otros iconos
+    case 'resources':
+      source = require('@/assets/images/resources.png');
+      break;
+    // Puedes agregar más casos para otros iconos
+    default:
+      source = require('@/assets/images/tips.png');
+      break;
+  }
+
+  const style: ImageStyle = {
+    width: size,
+    height: size,
+    tintColor: color, // Aplica el color dinámico
+  };
+
+
+
+  return <Image source={source} style={style} resizeMode="contain" />;
+};
